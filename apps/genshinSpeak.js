@@ -115,7 +115,9 @@ export class genshinSpeak extends plugin {
         var py='run_new.py'
 		if(gpu==0){py='run_new.py'};
 		if(gpu==1){py='run_old.py'};
-        var cmdStr = 'python ./plugins/vits-yunzai-Plugin/vits/'+ py +' --character=' + characternum + ' --text=' + data[1];
+        var cmdStr='';
+        if(data[0]==0){cmdStr='python ./plugins/vits-yunzai-Plugin/vits_paimeng/'+ py +' --text=' + data[1];}else{
+        cmdStr = 'python ./plugins/vits-yunzai-Plugin/vits/'+ py +' --character=' + characternum + ' --text=' + data[1];}
         exec(cmdStr, async function (error, stdout, stderr) {
             if (error) {
                 console.log("生成失败", stderr);
