@@ -34,7 +34,7 @@ def get_text(text, hps):
     text_norm = torch.LongTensor(text_norm)
     return text_norm
 
-hps = utils.get_hparams_from_file("./configs/genshin_base.json")
+hps = utils.get_hparams_from_file("./plugins/vits-yunzai-Plugin/vits_paimeng/configs/genshin_base.json")
 
 
 
@@ -47,7 +47,7 @@ net_g = SynthesizerTrn(
 _ = net_g.eval()
 
 
-_ = utils.load_checkpoint("G_1434000.pth", net_g, None)
+_ = utils.load_checkpoint("./plugins/vits-yunzai-Plugin/vits_paimeng/paimeng/paimeng.pth", net_g, None)
 text=args.text
 stn_tst = get_text(text, hps)
 with torch.no_grad():
