@@ -26,7 +26,8 @@ const noisew = 0.8
 // 生成时使用的 length_factor，可用于控制整体语速。默认为1.2。
 const length = 1.2
 var gpu = 0;
-var ex_wav = 0;
+var ex_wav = 1;
+var limit_length=200;
 function sleep(ms) {
     return new Promise(resolve=>setTimeout(resolve, ms))
 }
@@ -103,7 +104,10 @@ export class genshinSpeak extends plugin {
           text[i] = num[text[i]]
       }
       data[1] = text.join("")
-
+      if(data[1].length>limit_length){
+          await e.reply("当前字数"+ data[1].length +"超过字数限制" + limit_length );
+          return true;
+      }
         console.log("【语音合成】 \n【音色】:", data[0], "\n【内容】:", data[1])
         for (let i = 0; i < genshinSpeakers.length; i++) {
             if (data[0] == genshinSpeakers[i]) {
@@ -194,7 +198,10 @@ export class genshinSpeak extends plugin {
           text[i] = num[text[i]]
       }
       data[1] = text.join("")
-
+      if(data[1].length>limit_length){
+          await e.reply("当前字数"+ data[1].length +"超过字数限制" + limit_length );
+          return true;
+      }
         console.log("【语音合成】 \n【音色】:", data[0], "\n【内容】:", data[1])
         var characternum_bh3 = 0;
         if (data[0] == "丽塔") {
