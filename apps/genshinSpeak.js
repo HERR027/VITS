@@ -149,7 +149,7 @@ export class genshinSpeak extends plugin {
         if (data[1].length > 60) { 
             sleep_time = sleep_time + (data[1].length - 30)*400
         }
-        await e.reply("生成字数：" + data[1].length)
+        await e.reply("生成字数：" + data[1].length + "电脑别点高清语音")
         
         return true;
     }
@@ -309,7 +309,7 @@ export class genshinSpeak extends plugin {
         if (data[1].length > 100) {
             sleep_time = sleep_time + (data[1].length - 30) * 400
         }
-        await e.reply("生成字数：" + data[1].length)
+        await e.reply("生成字数：" + data[1].length + "电脑别点高清语音")
         return true;
 	}
 	
