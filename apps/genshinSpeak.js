@@ -26,6 +26,7 @@ const noisew = 0.8
 // 生成时使用的 length_factor，可用于控制整体语速。默认为1.2。
 const length = 1.2
 var gpu = 0;
+var low_wav= 1;
 var ex_wav = 1;
 var limit_length=200;
 function sleep(ms) {
@@ -65,6 +66,10 @@ export class genshinSpeak extends plugin {
 		{
           reg: '^(开启高清语音|关闭高清语音)$',
           fnc: 'ex_wav_Switch'
+        },
+        {
+          reg: '^(开启标清语音|关闭标清语音)$',
+          fnc: 'low_wav_Switch'
         }
       ]
 
@@ -127,7 +132,9 @@ export class genshinSpeak extends plugin {
                 e.reply(["生成失败，失败原因:" + stderr])
             } else {
                 console.log("生成成功", stdout);
+                if(low_wav==1){
                 e.reply(segment.record("example.wav"))
+                }
                 sleep(3000)
 				if(ex_wav==1){
                 await e.reply(await uploadRecord("example.wav", 0, false));
@@ -287,7 +294,9 @@ export class genshinSpeak extends plugin {
                 e.reply(["生成失败，失败原因:"+stderr])
             } else {
                 console.log("生成成功", stdout);
+                if(low_wav==1){
                 e.reply(segment.record("example.wav"))
+                }
                 sleep(3000)
 				if(ex_wav==1){
                 await e.reply(await uploadRecord("example.wav", 0, false));
@@ -343,6 +352,16 @@ export class genshinSpeak extends plugin {
 		   e.reply('关闭高清语音成功')
 	   }
    }
+     async low_wav_Switch(e){
+	   if(e=='开启标清语音'&&e.isMaster){
+		   low_wav=1;
+		   e.reply('开启标清语音成功')
+	   }
+	   if(e=='关闭标清语音'&&e.isMaster){
+		   low_wav=0;
+		   e.reply('关闭标清语音成功')
+	   }
+   }   
 }
 
 
