@@ -17,7 +17,7 @@ from data_utils import TextAudioLoader, TextAudioCollate, TextAudioSpeakerLoader
 from models import SynthesizerTrn
 from text.symbols import symbols
 from text import text_to_sequence
-#from transforms import Translate
+
 
 from scipy.io.wavfile import write
 import argparse
@@ -43,20 +43,18 @@ net_g = SynthesizerTrn(
     len(symbols),
     hps.data.filter_length // 2 + 1,
     hps.train.segment_size // hps.data.hop_length,
-    n_speakers=hps.data.n_speakers,#
+    n_speakers=hps.data.n_speakers,
     **hps.model)
 _ = net_g.eval()
 
 
-_ = utils.load_checkpoint("./plugins/vits-yunzai-Plugin/vits_bh3/bh3/bh3.pth", net_g, None)#G_389000.pth
+_ = utils.load_checkpoint("./plugins/vits-yunzai-Plugin/vits_bh3/bh3/bh3.pth", net_g, None)
 text=args.text
 stn_tst = get_text(text, hps)
 with torch.no_grad():
     x_tst = stn_tst.unsqueeze(0)
     x_tst_lengths = torch.LongTensor([stn_tst.size(0)])
     character=args.character
-    sid=torch.LongTensor([character])#指定第几个人说话
+    sid=torch.LongTensor([character])
     audio = net_g.infer(x_tst, x_tst_lengths, noise_scale=.667, sid = sid, noise_scale_w=0.8, length_scale=1.2)[0][0,0].data.cpu().float().numpy()
-#ipd.display(ipd.Audio(audio, rate=, normalize=False))
-    #write("example.wav", hps.data.sampling_rate, audio)
     scipy.io.wavfile.write("example.wav", hps.data.sampling_rate, audio)
