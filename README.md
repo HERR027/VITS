@@ -7,5 +7,5 @@ git clone -b pro https://gitee.com/sumght/vits_yunzai_plugin.git ./plugins/vits-
 
 2022.11.16 加入更好的派蒙语音。
 ```
-2542463598
+暂时关闭
 ```
