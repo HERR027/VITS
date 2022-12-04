@@ -29,6 +29,7 @@ var gpu = 0;
 var low_wav= 1;
 var ex_wav = 1;
 var limit_length=200;
+var onwork=0;
 function sleep(ms) {
     return new Promise(resolve=>setTimeout(resolve, ms))
 }
@@ -70,6 +71,10 @@ export class genshinSpeak extends plugin {
         {
           reg: '^(开启标清语音|关闭标清语音)$',
           fnc: 'low_wav_Switch'
+        },
+		{
+          reg: '^(开启语音|关闭语音)$',
+          fnc: 'work'
         }
       ]
 
@@ -100,6 +105,11 @@ export class genshinSpeak extends plugin {
 
     // 原神音色
     if (genshinSpeakers.includes(data[0])) {
+      if(onwork==1){
+      e.reply("当前有语音在合成");
+      return true;
+      }
+      onwork=1;
       data[1]=data[1].replace(/\\n/g,'。').replace(/\\r/g,'。').replace(/\ +/g, "，").replace(/[\r\n]/g, "。").replace("“", "，").replace("”", "，").replace(".", "。").replace(",", "，").replace("(", "，").replace(")", "，").replace("～", "，")
       // 原神语音接口不支持阿拉伯数字,所以将数字转为汉字
       let text = data[1].split("")
@@ -130,6 +140,7 @@ export class genshinSpeak extends plugin {
             if (error) {
                 console.log("生成失败", stderr);
                 e.reply(["生成失败，失败原因:" + stderr])
+                onwork=0;
             } else {
                 console.log("生成成功", stdout);
                 if(low_wav==1){
@@ -139,23 +150,9 @@ export class genshinSpeak extends plugin {
 				if(ex_wav==1){
                 await e.reply(await uploadRecord("example.wav", 0, false));
 				}
+                onwork=0;
             }
         })
-        if (data[1].length) {
-            var sleep_time = 60000;
-            if (data[1].length <= 30) {
-                sleep_time = 40000;
-                if (data[1].length <= 20) {
-                    sleep_time = 30000;
-                    if (data[1].length <= 10) {
-                        sleep_time = 20000;
-                    }
-                }
-            }
-        }
-        if (data[1].length > 60) { 
-            sleep_time = sleep_time + (data[1].length - 30)*400
-        }
         await e.reply("生成字数：" + data[1].length + "电脑别点高清语音")
         
         return true;
@@ -196,6 +193,11 @@ export class genshinSpeak extends plugin {
 	
 	//bh3音色 author：sumght
     else if (Object.keys(bh3Speakers).includes(data[0])){
+      if(onwork==1){
+      e.reply("当前有语音在合成");
+      return true;
+      }
+      onwork=1;
       data[1] = data[1].replace(/\\n/g,'。').replace(/\\r/g,'。').replace(/\ +/g, "，").replace(/[\r\n]/g, "。").replace("“", "，").replace("”", "，").replace(".", "。").replace(",", "，").replace("(", "，").replace(")", "，")
 	  let text = data[1].split("")
       const num = { "1": "一", "2": "二", "3": "三", "4": "四", "5": "五", "6": "六", "7": "七", "8": "八", "9": "九", "0": "零" }
@@ -292,6 +294,7 @@ export class genshinSpeak extends plugin {
             if (error) {
                 console.log("生成失败", stderr);
                 e.reply(["生成失败，失败原因:"+stderr])
+                onwork=0;
             } else {
                 console.log("生成成功", stdout);
                 if(low_wav==1){
@@ -301,23 +304,9 @@ export class genshinSpeak extends plugin {
 				if(ex_wav==1){
                 await e.reply(await uploadRecord("example.wav", 0, false));
 				}
+                onwork=0;
             }
         })
-        if (data[1].length) {
-            var sleep_time = 40000;
-            if (data[1].length <= 30) {
-                sleep_time = 30000;
-                if (data[1].length <= 20) {
-                    sleep_time = 20000;
-                    if (data[1].length <= 10) {
-                        sleep_time = 10000;
-                    }
-                }
-            }
-        }
-        if (data[1].length > 100) {
-            sleep_time = sleep_time + (data[1].length - 30) * 400
-        }
         await e.reply("生成字数：" + data[1].length + "电脑别点高清语音")
         return true;
 	}
@@ -361,7 +350,17 @@ export class genshinSpeak extends plugin {
 		   low_wav=0;
 		   e.reply('关闭标清语音成功')
 	   }
-   }   
+   }
+     async work(e){
+	   if(e=='开启语音'&&e.isMaster){
+		   onwork=0;
+		   e.reply('开启AI语音成功')
+	   }
+	   if(e=='关闭语音'&&e.isMaster){
+		   onwork=1;
+		   e.reply('关闭AI语音成功')
+	   }
+   }      
 }
 
 
