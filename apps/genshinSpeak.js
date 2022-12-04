@@ -118,6 +118,7 @@ export class genshinSpeak extends plugin {
       data[1] = text.join("")
       if(data[1].length>limit_length){
           await e.reply("当前字数"+ data[1].length +"超过字数限制" + limit_length );
+          onwork=0;
           return true;
       }
 
@@ -205,6 +206,7 @@ export class genshinSpeak extends plugin {
       data[1] = text.join("")
       if(data[1].length>limit_length){
           await e.reply("当前字数"+ data[1].length +"超过字数限制" + limit_length );
+          onwork=0;
           return true;
       }
         console.log("【语音合成】 \n【音色】:", data[0], "\n【内容】:", data[1])
